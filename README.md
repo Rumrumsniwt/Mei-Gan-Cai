@@ -1,2 +1,2 @@
-# -
-Generate scores on Akatsuki with the form of pictures
+# 梅干菜
+Generate scores on Akatsuki with the form of pictures.
