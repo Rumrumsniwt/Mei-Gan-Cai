@@ -5,12 +5,15 @@
 
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
-import requests, json, math
+import requests, json, math, time
 import cv2
 
-page=8
-url='http://akatsuki.pw/api/v1/users/scores/best?mode=0&p='+str(page)+'&l=100&rx=1&id=4391'
-url2='https://akatsuki.pw/api/v1/users/rxfull?id=4391'
+page=10 # Page Number of API
+ID=4391 # Your User ID
+item=99 # Item of BP on that certain page (0~99)
+
+url='http://akatsuki.pw/api/v1/users/scores/best?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
+url2='https://akatsuki.pw/api/v1/users/rxfull?id='+str(ID)
 r=requests.get(url)
 r2=requests.get(url2)
 result=json.loads(r.text)
@@ -23,6 +26,7 @@ image=Image.new('RGB',(width,height),(255,255,255))
 image2=Image.new('RGB',(900,250),(0,0,0))
 font1=ImageFont.truetype('arial.ttf',36)
 font11=ImageFont.truetype('arial.ttf',24)
+font12=ImageFont.truetype('arial.ttf',12)
 font2=ImageFont.truetype('ARLRDBD.ttf',150)
 font21=ImageFont.truetype('ARLRDBD.ttf',36)
 font22=ImageFont.truetype('ARLRDBD.ttf',24)
@@ -30,7 +34,6 @@ font3=ImageFont.truetype('digifaw.ttf',32)
 font4=ImageFont.truetype('GOTHIC.ttf',65)
 font41=ImageFont.truetype('GOTHIC.ttf',50)
 
-item=26
 url11='https://assets.ppy.sh/beatmaps/'
 setid=str(scores[item]['beatmap']['beatmapset_id'])
 url12='/covers/cover.jpg'
@@ -49,7 +52,6 @@ itemdes='Your BP'+str((page-1)*100+item+1)+' is:'
 
 draw.text((10,8),itemdes,font=font1,fill=(0,0,0))
 
-score=scores[item]['score']
 maxcombo=str(scores[item]['max_combo'])+'/'
 maxcombomap=str(scores[item]['beatmap']['max_combo'])
 count300='x'+str(scores[item]['count_300'])
@@ -65,7 +67,7 @@ rank=scores[item]['rank']
 beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])
 songname=scores[item]['beatmap']['song_name']
 player='Player: '+name
-box=(0,0,260,256)
+mods=scores[item]['mods']
 
 if rank=='A':
 	draw.text((10,100),rank,font=font2,fill=(0,255,0))
@@ -108,6 +110,78 @@ draw.text((120,260),playtime,font=font22,fill=(255,255,255))
 draw.text((510,100),acc,font=font41,fill=(255,255,255))
 draw.text((510,200),pp,font=font41,fill=(255,255,255))
 draw.text((510,150),maxcombo+maxcombomap,font=font41,fill=(255,255,255))
+
+modsafter=mods-128
+comb=[2,8,16,64,256,576,1024,4096]
+comc=[0,0,0,0,0,0,0,0]
+imgdt=Image.open("DT.jpg")
+imgez=Image.open("EZ.jpg")
+imgfl=Image.open("FL.jpg")
+imghd=Image.open("HD.jpg")
+imghr=Image.open("HR.jpg")
+imght=Image.open("HT.jpg")
+imgnc=Image.open("NC.jpg")
+imgso=Image.open("SO.jpg")
+term=7
+while modsafter>0:
+	if modsafter<comb[term]:
+		term-=1
+	else:
+		modsafter-=comb[term]
+		comc[term]+=1
+		term-=1
+
+n=1
+if comc[0]==1:
+	image.paste(imgez,(770,50))
+	n+=1
+else:
+	n=n
+
+if comc[1]==1:
+	image.paste(imghd,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[2]==1:
+	image.paste(imghr,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[3]==1:
+	image.paste(imgdt,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[4]==1:
+	image.paste(imght,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[5]==1:
+	image.paste(imgnc,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[6]==1:
+	image.paste(imgfl,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+if comc[7]==1:
+	image.paste(imgso,(770+(n-1)%2*65,50+(n-1)//2*65))
+	n+=1
+else:
+	n=n
+
+localtime=time.asctime(time.localtime(time.time()))
+draw.text((750,280),localtime,font=font12,fill=(255,255,255))
 
 image.save('result.png')
 image.show()
