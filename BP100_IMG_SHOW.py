@@ -6,13 +6,14 @@
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
 import requests, json, math, time
-import cv2
+# import cv2
 
-page=10 # Page Number of API
+page=9 # Page Number of API
 ID=4391 # Your User ID
-item=99 # Item of BP on that certain page (0~99)
+item=61 # Item of BP on that certain page (0~99)
+module='best' # bruh
 
-url='http://akatsuki.pw/api/v1/users/scores/best?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
+url='http://akatsuki.pw/api/v1/users/scores/'+module+'?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
 url2='https://akatsuki.pw/api/v1/users/rxfull?id='+str(ID)
 r=requests.get(url)
 r2=requests.get(url2)
@@ -38,6 +39,10 @@ url11='https://assets.ppy.sh/beatmaps/'
 setid=str(scores[item]['beatmap']['beatmapset_id'])
 url12='/covers/cover.jpg'
 fullurl=url11+setid+url12
+url3='https://old.ppy.sh/api/get_beatmaps?k=41a40b9c34b5f28e51c588aa9cba1ea335f6cb24&b='+str(scores[item]['beatmap']['beatmap_id'])
+r3=requests.get(url3)
+result3=json.loads(r3.text)
+songname=result3[0]['artist']+' - '+result3[0]['title']+' ['+result3[0]['version']+']'
 
 response=requests.get(fullurl)
 response=response.content
@@ -48,7 +53,11 @@ img=Image.blend(img,image2,0.7)
 image.paste(img,(0,50))
 draw=ImageDraw.Draw(image)
 
-itemdes='Your BP'+str((page-1)*100+item+1)+' is:'
+itemdes=''
+if module=='best':
+	itemdes='Your BP'+str((page-1)*100+item+1)+' is:'
+elif module=='recent':
+	itemdes='Your recent performance ('+str((page-1)*100+item+1)+') is:'
 
 draw.text((10,8),itemdes,font=font1,fill=(0,0,0))
 
@@ -65,7 +74,6 @@ acc=str(scores[item]['accuracy'])+'%'
 pp=str(round(scores[item]['pp'],2))+'pp'
 rank=scores[item]['rank']
 beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])
-songname=scores[item]['beatmap']['song_name']
 player='Player: '+name
 mods=scores[item]['mods']
 
