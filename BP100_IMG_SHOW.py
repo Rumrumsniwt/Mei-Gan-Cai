@@ -6,11 +6,10 @@
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
 import requests, json, math, time
-# import cv2
 
-page=9 # Page Number of API
+page=10 # Page Number of API
 ID=4391 # Your User ID
-item=61 # Item of BP on that certain page (0~99)
+item=99 # Item of BP on that certain page (0~99)
 module='best' # bruh
 
 url='http://akatsuki.pw/api/v1/users/scores/'+module+'?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
@@ -144,49 +143,49 @@ if comc[0]==1:
 	image.paste(imgez,(770,50))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[1]==1:
 	image.paste(imghd,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[2]==1:
 	image.paste(imghr,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[3]==1:
 	image.paste(imgdt,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[4]==1:
 	image.paste(imght,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[5]==1:
 	image.paste(imgnc,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[6]==1:
 	image.paste(imgfl,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 if comc[7]==1:
 	image.paste(imgso,(770+(n-1)%2*65,50+(n-1)//2*65))
 	n+=1
 else:
-	n=n
+	pass
 
 localtime=time.asctime(time.localtime(time.time()))
 draw.text((750,280),localtime,font=font12,fill=(255,255,255))
