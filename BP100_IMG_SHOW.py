@@ -42,6 +42,7 @@ url3='https://old.ppy.sh/api/get_beatmaps?k=41a40b9c34b5f28e51c588aa9cba1ea335f6
 r3=requests.get(url3)
 result3=json.loads(r3.text)
 songname=result3[0]['artist']+' - '+result3[0]['title']+' ['+result3[0]['version']+']'
+creator=' (by '+result3[0]['creator']+')'
 
 response=requests.get(fullurl)
 response=response.content
@@ -72,7 +73,7 @@ playtime='Playtime: '+scores[item]['time']
 acc=str(scores[item]['accuracy'])+'%'
 pp=str(round(scores[item]['pp'],2))+'pp'
 rank=scores[item]['rank']
-beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])
+beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])+creator
 player='Player: '+name
 mods=scores[item]['mods']
 
@@ -188,7 +189,7 @@ else:
 	pass
 
 localtime=time.asctime(time.localtime(time.time()))
-draw.text((750,280),localtime,font=font12,fill=(255,255,255))
+draw.text((740,280),localtime,font=font12,fill=(255,255,255))
 
 image.save('result.png')
 image.show()
