@@ -7,10 +7,11 @@ from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
 import requests, json, math, time
 
-page=10 # Page Number of API
-ID=4391 # Your User ID
-item=99 # Item of BP on that certain page (0~99)
-module='best' # bruh
+page=int(input('Page number:')) # Page Number of API
+ID=int(input('Your ID?:')) # Your User ID
+item=int(input('Item:')) # Item of BP on that certain page (0~99)
+module=input('Best or Recent?:') # bruh
+optiontosave=input('Wanna save your record?:(Y/N)') # Decide whether to save or not
 
 url='http://akatsuki.pw/api/v1/users/scores/'+module+'?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
 url2='https://akatsuki.pw/api/v1/users/rxfull?id='+str(ID)
@@ -42,7 +43,8 @@ url3='https://old.ppy.sh/api/get_beatmaps?k=41a40b9c34b5f28e51c588aa9cba1ea335f6
 r3=requests.get(url3)
 result3=json.loads(r3.text)
 songname=result3[0]['artist']+' - '+result3[0]['title']+' ['+result3[0]['version']+']'
-creator=' (by '+result3[0]['creator']+')'
+creator=' (Beatmap by '+result3[0]['creator']+')'
+#creator=' (Beatmap by sdfsfsdfsfsdfsdfsfsdf)'
 
 response=requests.get(fullurl)
 response=response.content
@@ -60,6 +62,7 @@ elif module=='recent':
 	itemdes='Your recent performance ('+str((page-1)*100+item+1)+') is:'
 
 draw.text((10,8),itemdes,font=font1,fill=(0,0,0))
+draw.text((815-9*len(creator),9),creator,font=font11,fill=(0,0,0))
 
 maxcombo=str(scores[item]['max_combo'])+'/'
 maxcombomap=str(scores[item]['beatmap']['max_combo'])
@@ -73,7 +76,7 @@ playtime='Playtime: '+scores[item]['time']
 acc=str(scores[item]['accuracy'])+'%'
 pp=str(round(scores[item]['pp'],2))+'pp'
 rank=scores[item]['rank']
-beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])+creator
+beatmapid='Beatmap ID: '+str(scores[item]['beatmap']['beatmap_id'])
 player='Player: '+name
 mods=scores[item]['mods']
 
@@ -190,6 +193,12 @@ else:
 
 localtime=time.asctime(time.localtime(time.time()))
 draw.text((740,280),localtime,font=font12,fill=(255,255,255))
+if optiontosave.lower=='y':
+        data=open("BP-Record.txt",'a')
+        print(str(time.time())+'\t'+str(round(scores[item]['pp'],2))+'\t'+str((page-1)*100+item+1)+'\t'+str(ID)+'\t'+module,file=data)
+        data.close()
+else:
+        pass
 
 image.save('result.png')
 image.show()
