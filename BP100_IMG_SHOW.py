@@ -6,12 +6,13 @@
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
 import requests, json, math, time
+import os
 
-page=int(input('Page number:')) # Page Number of API
-ID=int(input('Your ID?:')) # Your User ID
-item=int(input('Item:')) # Item of BP on that certain page (0~99)
+page=int(input('Page number (0,1,2,...):')) # Page Number of API
+ID=int(input('Your ID? (An integer):')) # Your User ID
+item=int(input('Item (0~99):')) # Item of BP on that certain page (0~99)
 module=input('Best or Recent?:') # bruh
-optiontosave=input('Wanna save your record?:(Y/N)') # Decide whether to save or not
+optiontosave=input('Wanna save your record? (Y/N):') # Decide whether to save or not
 
 url='http://akatsuki.pw/api/v1/users/scores/'+module+'?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
 url2='https://akatsuki.pw/api/v1/users/rxfull?id='+str(ID)
@@ -143,50 +144,56 @@ while modsafter>0:
 		term-=1
 
 n=1
+ycoor=0
+if len(songname)>=58:
+        ycoor=90
+else:
+        ycoor=50
+        
 if comc[0]==1:
-	image.paste(imgez,(770,50))
+	image.paste(imgez,(770,ycoor))
 	n+=1
 else:
 	pass
 
 if comc[1]==1:
-	image.paste(imghd,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imghd,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[2]==1:
-	image.paste(imghr,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imghr,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[3]==1:
-	image.paste(imgdt,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imgdt,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[4]==1:
-	image.paste(imght,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imght,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[5]==1:
-	image.paste(imgnc,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imgnc,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[6]==1:
-	image.paste(imgfl,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imgfl,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
 
 if comc[7]==1:
-	image.paste(imgso,(770+(n-1)%2*65,50+(n-1)//2*65))
+	image.paste(imgso,(770+(n-1)%2*65,ycoor+(n-1)//2*65))
 	n+=1
 else:
 	pass
@@ -197,7 +204,7 @@ if optiontosave.lower=='y':
         data=open("BP-Record.txt",'a')
         print(str(time.time())+'\t'+str(round(scores[item]['pp'],2))+'\t'+str((page-1)*100+item+1)+'\t'+str(ID)+'\t'+module,file=data)
         data.close()
-else:
+elif optiontosave.lower=='n':
         pass
 
 image.save('result.png')
