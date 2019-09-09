@@ -200,11 +200,12 @@ else:
 
 localtime=time.asctime(time.localtime(time.time()))
 draw.text((740,280),localtime,font=font12,fill=(255,255,255))
-if optiontosave.lower=='y':
+
+if optiontosave.lower()=="y":
         data=open("BP-Record.txt",'a')
         print(str(time.time())+'\t'+str(round(scores[item]['pp'],2))+'\t'+str((page-1)*100+item+1)+'\t'+str(ID)+'\t'+module,file=data)
         data.close()
-elif optiontosave.lower=='n':
+elif optiontosave.lower()=="n":
         pass
 
 image.save('result.png')
