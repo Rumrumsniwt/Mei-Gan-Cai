@@ -5,14 +5,15 @@
 
 from PIL import Image,ImageDraw,ImageFont,ImageFilter
 from io import BytesIO
-import requests, json, math, time
-import os
+import requests, json, time, math
 
-page=int(input('Page number (0,1,2,...):')) # Page Number of API
+bpitem=int(input('Which BP you want to search? (1,2,3,...):'))
+page=math.ceil(bpitem/100)
 ID=int(input('Your ID? (An integer):')) # Your User ID
-item=int(input('Item (0~99):')) # Item of BP on that certain page (0~99)
+item=bpitem-(page-1)*100-1
 module=input('Best or Recent?:') # bruh
 optiontosave=input('Wanna save your record? (Y/N):') # Decide whether to save or not
+print('Processing...')
 
 url='http://akatsuki.pw/api/v1/users/scores/'+module+'?mode=0&p='+str(page)+'&l=100&rx=1&id='+str(ID)
 url2='https://akatsuki.pw/api/v1/users/rxfull?id='+str(ID)
@@ -58,7 +59,7 @@ draw=ImageDraw.Draw(image)
 
 itemdes=''
 if module=='best':
-	itemdes='Your BP'+str((page-1)*100+item+1)+' is:'
+	itemdes='Your BP'+str(bpitem)+' is:'
 elif module=='recent':
 	itemdes='Your recent performance ('+str((page-1)*100+item+1)+') is:'
 
@@ -203,7 +204,7 @@ draw.text((740,280),localtime,font=font12,fill=(255,255,255))
 
 if optiontosave.lower()=="y":
         data=open("BP-Record.txt",'a')
-        print(str(time.time())+'\t'+str(round(scores[item]['pp'],2))+'\t'+str((page-1)*100+item+1)+'\t'+str(ID)+'\t'+module,file=data)
+        print(str(time.time())+'\t'+str(round(scores[item]['pp'],2))+'\t'+str(bpitem)+'\t'+str(ID)+'\t'+module,file=data)
         data.close()
 elif optiontosave.lower()=="n":
         pass
