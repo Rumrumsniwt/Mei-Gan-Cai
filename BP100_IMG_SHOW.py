@@ -41,21 +41,29 @@ url11='https://assets.ppy.sh/beatmaps/'
 setid=str(scores[item]['beatmap']['beatmapset_id'])
 url12='/covers/cover.jpg'
 fullurl=url11+setid+url12
-url3='https://old.ppy.sh/api/get_beatmaps?k=41a40b9c34b5f28e51c588aa9cba1ea335f6cb24&b='+str(scores[item]['beatmap']['beatmap_id'])
-r3=requests.get(url3)
-result3=json.loads(r3.text)
-songname=result3[0]['artist']+' - '+result3[0]['title']+' ['+result3[0]['version']+']'
-creator=' (Beatmap by '+result3[0]['creator']+')'
-#creator=' (Beatmap by sdfsfsdfsfsdfsdfsfsdf)'
+try:
+        url3='https://old.ppy.sh/api/get_beatmaps?k=41a40b9c34b5f28e51c588aa9cba1ea335f6cb24&b='+str(scores[item]['beatmap']['beatmap_id'])
+        r3=requests.get(url3)
+        result3=json.loads(r3.text)
+        songname=result3[0]['artist']+' - '+result3[0]['title']+' ['+result3[0]['version']+']'
+except IndexError:
+        songname=scores[item]['beatmap']['song_name']
+else:
+        creator=' (Beatmap by '+result3[0]['creator']+')'
 
-response=requests.get(fullurl)
-response=response.content
-BytesIOOBj=BytesIO()
-BytesIOOBj.write(response)
-img=Image.open(BytesIOOBj)
-img=Image.blend(img,image2,0.7)
-image.paste(img,(0,50))
-draw=ImageDraw.Draw(image)
+try:
+        response=requests.get(fullurl)
+        response=response.content
+        BytesIOOBj=BytesIO()
+        BytesIOOBj.write(response)
+        img=Image.open(BytesIOOBj)
+except OSError:
+        image.paste(image2,(0,50))
+        draw=ImageDraw.Draw(image)
+else:
+        img=Image.blend(img,image2,0.7)
+        image.paste(img,(0,50))
+        draw=ImageDraw.Draw(image)
 
 itemdes=''
 if module=='best':
@@ -64,7 +72,12 @@ elif module=='recent':
 	itemdes='Your recent performance ('+str((page-1)*100+item+1)+') is:'
 
 draw.text((10,8),itemdes,font=font1,fill=(0,0,0))
-draw.text((815-9*len(creator),9),creator,font=font11,fill=(0,0,0))
+try:
+        draw.text((815-9*len(creator),9),creator,font=font11,fill=(0,0,0))
+except NameError:
+        pass
+else:
+        pass
 
 maxcombo=str(scores[item]['max_combo'])+'/'
 maxcombomap=str(scores[item]['beatmap']['max_combo'])
@@ -99,7 +112,7 @@ elif rank=='S':
 elif rank=='SH':
 	draw.text((10,100),'S',font=font2,fill=(245,245,220))
 elif rank=='D':
-	draw.text((10,100),'D',font=font2,fill=(255,255,0))
+	draw.text((10,100),'D',font=font2,fill=(255,0,0))
 	
 draw.text((120,55),songname,font=font11,fill=(255,255,255))
 #draw.text((10,100),rank,font=font2,fill=(0,255,0))
